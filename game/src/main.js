@@ -7,7 +7,7 @@
 // shuffle. ?shot=table plays a few opening moves so the table shows played
 // cards, a log and spent tide.
 
-import { createGame, startDuel, playCard, beginPlayerTurn, checkEnd, START_LIFE } from './rules.js';
+import { createGame, startDuel, playCard, beginPlayerTurn, beginEnemyTurn, checkEnd, START_LIFE } from './rules.js';
 import { runEnemyTurn } from './ai.js';
 import { renderAll, floatText, confetti } from './render.js';
 
@@ -72,7 +72,9 @@ async function endTurn() {
   ui.busy = true;
   refresh();
   await wait(350);
-  // The Warden takes its turn, one card at a time.
+  // The Warden draws, its tide rises, then it takes its turn, one card at
+  // a time so the player can watch the cards land.
+  beginEnemyTurn(game);
   await runEnemyTurn(game, (report) => {
     if (report.damage) floatText(ui.pLifeBar.parentElement, `-${report.damage}`, 'dmg');
     if (report.healed) floatText(ui.eLifeBar.parentElement, `+${report.healed}`, 'heal');
