@@ -1,0 +1,198 @@
+/* style.css — the look of Tidebreak Duel. Deep reef table, chunky cards with
+   big readable numbers, suit colour AND shape on every card. No images, no
+   fonts from the network: system fonts and CSS-drawn shapes only. */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "Trebuchet MS", Verdana, sans-serif;
+  background: #06283a;
+  color: #eaf6ff;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+#app { max-width: 1180px; margin: 0 auto; padding: 10px 16px 24px; }
+
+header.topbar {
+  display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap;
+  padding: 6px 2px 10px;
+}
+h1.game-title { font-size: 30px; letter-spacing: 2px; color: #ffd166; text-shadow: 0 2px 0 #7a4a00; }
+h1.game-title span { color: #7fd4ff; }
+.subtitle { color: #9fd8ef; font-size: 14px; }
+.turn-label { margin-left: auto; font-weight: bold; font-size: 18px; color: #ffd166; }
+
+/* ---- the table ---- */
+#table {
+  position: relative;
+  background: radial-gradient(ellipse at 50% 30%, #0e5a74 0%, #084155 55%, #052e3d 100%);
+  border: 6px solid #8a5a2b;
+  border-radius: 22px;
+  padding: 14px 18px 10px;
+  box-shadow: inset 0 0 60px rgba(0,0,0,.45), 0 8px 24px rgba(0,0,0,.5);
+  min-height: 560px;
+}
+#table.dimmed { filter: brightness(.45) saturate(.7); }
+
+.side-row { display: flex; align-items: center; gap: 14px; }
+.side-row.enemy-row { border-bottom: 2px dashed rgba(255,255,255,.18); padding-bottom: 10px; }
+.side-row.player-row { border-top: 2px dashed rgba(255,255,255,.18); padding-top: 10px; }
+
+.avatar {
+  width: 64px; height: 64px; border-radius: 50%; flex: 0 0 64px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 30px; font-weight: bold; color: #fff;
+  border: 3px solid rgba(255,255,255,.7);
+}
+.avatar.enemy { background: radial-gradient(circle at 35% 30%, #a06cd5, #4c2a7a); }
+.avatar.player { background: radial-gradient(circle at 35% 30%, #2fa8e0, #0b5e86); }
+.side-info { min-width: 210px; }
+.side-name { font-size: 19px; font-weight: bold; }
+.life-line { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+.life-bar { width: 170px; height: 16px; background: #03202e; border: 2px solid #fff3; border-radius: 9px; overflow: hidden; }
+.life-fill { height: 100%; background: linear-gradient(90deg, #ff5d5d, #ff9d5c); transition: width .45s ease; }
+.life-fill.player-fill { background: linear-gradient(90deg, #37d67a, #a8e063); }
+.life-num { font-size: 17px; font-weight: bold; }
+.shield-line { font-size: 14px; color: #aee6ff; min-height: 18px; }
+.tide-line { font-size: 15px; color: #ffd166; font-weight: bold; }
+.tide-pips { letter-spacing: 2px; color: #7fd4ff; font-size: 15px; }
+.deck-line { font-size: 13px; color: #bfe6f5; }
+
+.intent {
+  margin-left: auto; max-width: 300px; font-style: italic; color: #ffe9a8;
+  font-size: 14px; text-align: right;
+}
+
+/* ---- hands ---- */
+.hand { display: flex; gap: 8px; flex-wrap: wrap; align-items: flex-start; }
+.hand.enemy-hand { min-height: 118px; }
+.hand.player-hand { min-height: 172px; }
+.hand-label { font-size: 13px; letter-spacing: 1px; color: #cfeefb; text-transform: uppercase; margin: 6px 0 4px; }
+
+/* ---- a card ---- */
+.card {
+  position: relative;
+  width: 118px; height: 164px;
+  border-radius: 12px;
+  border: 3px solid var(--suit-dark);
+  background: linear-gradient(180deg, #fffdf5 0%, #f3ead2 100%);
+  color: #1c2733;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+  padding: 8px 8px 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,.45);
+  transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+  animation: deal-in .4s ease backwards;
+  animation-delay: calc(var(--i, 0) * 60ms);
+}
+@keyframes deal-in {
+  from { transform: translateY(46px) rotate(4deg); opacity: 0; }
+  to { transform: translateY(0) rotate(0); opacity: 1; }
+}
+.card:hover, .card:focus-visible { transform: translateY(-14px) scale(1.05); box-shadow: 0 12px 22px rgba(0,0,0,.55); outline: 3px solid #ffd166; z-index: 3; }
+.card.unaffordable { filter: grayscale(.55) brightness(.82); }
+.card .cost {
+  position: absolute; top: -8px; left: -8px;
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--suit); color: #fff; border: 2px solid #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; font-weight: bold;
+}
+.card .glyph { display: block; width: 44px; height: 44px; margin: 2px auto 2px; color: var(--suit); }
+.card .glyph svg { width: 100%; height: 100%; fill: currentColor; }
+.card .name { display: block; font-size: 15px; font-weight: bold; text-align: center; line-height: 1.1; min-height: 32px; }
+.card .suit-name { display: block; text-align: center; font-size: 11px; letter-spacing: 2px; color: var(--suit-dark); font-weight: bold; }
+.card .amount { display: block; text-align: center; font-size: 21px; font-weight: bold; color: var(--suit-dark); margin-top: 2px; }
+.card .text { display: block; font-size: 11.5px; line-height: 1.25; color: #33424f; text-align: center; margin-top: 3px; }
+.card .key {
+  position: absolute; top: -8px; right: -8px;
+  width: 24px; height: 24px; border-radius: 50%;
+  background: #fff; color: #33424f; border: 2px solid #8a97a3;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: bold;
+}
+.card.mini { width: 92px; height: 128px; padding: 6px; animation: flip-in .5s ease backwards; cursor: default; }
+.card.mini .glyph { width: 30px; height: 30px; }
+.card.mini .name { font-size: 12px; min-height: 24px; }
+.card.mini .amount { font-size: 17px; }
+.card.mini .text { font-size: 10px; }
+@keyframes flip-in { from { transform: rotateY(90deg) scale(.8); opacity: 0; } to { transform: rotateY(0) scale(1); opacity: 1; } }
+
+.card-back {
+  width: 92px; height: 128px; border-radius: 12px; cursor: default;
+  background: repeating-linear-gradient(45deg, #4c2a7a 0 10px, #5d3a92 10px 20px);
+  border: 3px solid #d9c2ff; color: #fff;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+}
+.card-back .back-mark { font-size: 26px; }
+.card-back .back-name { font-size: 9px; letter-spacing: 2px; }
+
+/* ---- middle strip: last played + log + controls ---- */
+.mid-strip { display: flex; gap: 16px; align-items: stretch; margin: 8px 0; }
+.last-played { flex: 0 0 250px; }
+.last-tag { font-size: 12px; letter-spacing: 1px; color: #ffd166; font-weight: bold; margin-bottom: 4px; }
+.last-empty { font-size: 13px; color: #bfe6f5; font-style: italic; padding-top: 18px; }
+.resonance { position: absolute; top: -10px; right: -6px; background: #ffd166; color: #7a2e00; font-size: 11px; font-weight: bold; border-radius: 8px; padding: 2px 6px; transform: rotate(4deg); box-shadow: 0 2px 6px rgba(0,0,0,.4); }
+
+.battle-log { flex: 1; min-width: 0; }
+.battle-log h3, .controls h3 { font-size: 13px; letter-spacing: 1px; color: #cfeefb; text-transform: uppercase; margin-bottom: 4px; }
+#log { list-style: none; font-size: 13.5px; line-height: 1.45; color: #eaf6ff; }
+#log li { border-bottom: 1px solid rgba(255,255,255,.08); padding: 2px 0; }
+#log li:first-child { color: #ffd166; font-weight: bold; }
+
+.controls { flex: 0 0 210px; display: flex; flex-direction: column; gap: 8px; }
+button.big-btn {
+  font-family: inherit; font-size: 17px; font-weight: bold; cursor: pointer;
+  border: 3px solid #7a4a00; border-radius: 12px; padding: 10px 14px;
+  background: linear-gradient(180deg, #ffd166, #f0a832); color: #3a2400;
+  box-shadow: 0 4px 0 #7a4a00;
+}
+button.big-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #7a4a00; }
+button.big-btn:disabled { filter: grayscale(.7) brightness(.75); cursor: default; }
+button.ghost-btn {
+  font-family: inherit; font-size: 14px; cursor: pointer; border-radius: 10px;
+  border: 2px solid #7fd4ff; background: transparent; color: #aee6ff; padding: 8px 10px;
+}
+.hint { font-size: 12.5px; color: #9fd8ef; line-height: 1.5; }
+
+/* ---- floating damage numbers + confetti ---- */
+.float-text { position: absolute; font-size: 26px; font-weight: bold; animation: float-up 1.4s ease forwards; pointer-events: none; z-index: 5; }
+.float-text.dmg { color: #ff6b6b; text-shadow: 0 2px 0 #600; }
+.float-text.heal { color: #6dffa8; text-shadow: 0 2px 0 #063; }
+@keyframes float-up { from { transform: translateY(0); opacity: 1; } to { transform: translateY(-44px); opacity: 0; } }
+.confetti-piece { position: absolute; top: -10px; width: 10px; height: 16px; border-radius: 2px; animation: confetti-fall linear forwards; z-index: 6; pointer-events: none; }
+@keyframes confetti-fall { from { transform: translateY(0) rotate(0); opacity: 1; } to { transform: translateY(620px) rotate(720deg); opacity: 0; } }
+
+/* ---- full-screen overlays ---- */
+.overlay {
+  position: fixed; inset: 0; z-index: 20;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(3, 24, 36, .88);
+}
+.overlay.hidden { display: none; }
+.panel {
+  text-align: center; max-width: 620px; padding: 36px 44px;
+  background: linear-gradient(180deg, #0e5a74, #083a4f);
+  border: 4px solid #ffd166; border-radius: 24px;
+  box-shadow: 0 16px 50px rgba(0,0,0,.6);
+}
+.panel h2 { font-size: 44px; letter-spacing: 3px; margin-bottom: 8px; }
+.panel h2.win { color: #6dffa8; }
+.panel h2.loss { color: #ff8a8a; }
+.panel h2.title { color: #ffd166; font-size: 52px; }
+.panel p { font-size: 16px; line-height: 1.55; color: #d9f1fb; margin: 10px 0; }
+.panel .suits-row { display: flex; gap: 18px; justify-content: center; margin: 16px 0; }
+.suit-chip { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 13px; font-weight: bold; }
+.suit-chip .dot { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 20px; }
+.panel .score-line { font-size: 20px; font-weight: bold; color: #ffd166; }
+.panel button { margin-top: 14px; }
+.howto { text-align: left; font-size: 14.5px; line-height: 1.6; margin: 12px auto; max-width: 480px; }
+.howto b { color: #ffd166; }
+
+@media (max-width: 760px) {
+  .mid-strip { flex-direction: column; }
+  .card { width: 104px; height: 150px; }
+  .panel h2.title { font-size: 38px; }
+}

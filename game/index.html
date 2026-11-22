@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tidebreak Duel — a card game of reef and flame</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<div id="app">
+  <header class="topbar">
+    <h1 class="game-title">TIDE<span>BREAK</span> DUEL</h1>
+    <span class="subtitle">A card duel of reef and flame — you vs. the Reef Warden</span>
+    <span class="turn-label" id="turnLabel">Turn 1</span>
+  </header>
+
+  <main id="table">
+    <!-- Opponent -->
+    <section class="side-row enemy-row">
+      <div class="avatar enemy" title="The Reef Warden">🐚</div>
+      <div class="side-info">
+        <div class="side-name">The Reef Warden</div>
+        <div class="life-line">
+          <div class="life-bar"><div class="life-fill" id="eLifeBar" style="width:100%"></div></div>
+          <span class="life-num" id="eLife">30 / 30</span>
+        </div>
+        <div class="shield-line" id="eShield"></div>
+        <div class="deck-line"><span id="eDeck">Deck 25</span> · <span id="eHandCount">5 cards</span></div>
+      </div>
+      <div class="intent" id="intent"></div>
+    </section>
+    <div class="hand-label">Warden's hand</div>
+    <div class="hand enemy-hand" id="enemyHand"></div>
+
+    <!-- Middle strip -->
+    <div class="mid-strip">
+      <div class="last-played">
+        <div class="last-tag" id="lastTag">LAST CARD PLAYED</div>
+        <div id="lastPlayed"></div>
+      </div>
+      <div class="battle-log">
+        <h3>Battle log</h3>
+        <ul id="log"></ul>
+      </div>
+      <div class="controls">
+        <h3>Your move</h3>
+        <button class="big-btn" id="endTurn">End turn ⏎</button>
+        <button class="ghost-btn" id="newGame">New duel (N)</button>
+        <p class="hint">Click a card or press <b>1–7</b> to play it. <b>Space</b> ends your turn. Play two cards of the same suit in one turn for a <b>Resonance +2</b>.</p>
+      </div>
+    </div>
+
+    <!-- Player -->
+    <div class="hand-label">Your hand</div>
+    <div class="hand player-hand" id="playerHand"></div>
+    <section class="side-row player-row">
+      <div class="avatar player" title="You, the Tidebreaker">🌊</div>
+      <div class="side-info">
+        <div class="side-name">You — the Tidebreaker</div>
+        <div class="life-line">
+          <div class="life-bar"><div class="life-fill player-fill" id="pLifeBar" style="width:100%"></div></div>
+          <span class="life-num" id="pLife">30 / 30</span>
+        </div>
+        <div class="shield-line" id="pShield"></div>
+        <div class="tide-line"><span id="pTide">Tide 1 / 1</span> <span class="tide-pips" id="pTidePips">●</span></div>
+        <div class="deck-line" id="pDeck">Deck 25</div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- Title screen -->
+<div class="overlay" id="titleScreen">
+  <div class="panel">
+    <h2 class="title">TIDEBREAK DUEL</h2>
+    <p>A card duel on a living reef. You are the Tidebreaker; across the table sits the Reef Warden, guarding the last pearl of the drowned city.</p>
+    <div class="suits-row">
+      <span class="suit-chip"><span class="dot" style="background:#2fa8e0">💧</span>Wave · strikes</span>
+      <span class="suit-chip"><span class="dot" style="background:#f2692e">🔥</span>Ember · fast</span>
+      <span class="suit-chip"><span class="dot" style="background:#3cb371">🍃</span>Kelp · heals</span>
+      <span class="suit-chip"><span class="dot" style="background:#a06cd5">🐚</span>Coral · guards</span>
+    </div>
+    <div class="howto">
+      <b>Goal:</b> reduce the Warden's life from 30 to 0 before yours falls.<br>
+      <b>Each turn:</b> your tide grows by 1 (up to 8), you draw a card, then play cards by clicking them or pressing <b>1–7</b>.<br>
+      <b>Resonance:</b> two cards of the same suit in one turn — the second gains <b>+2</b>.<br>
+      <b>Read the Warden:</b> its intent is shown above its hand. When it gathers tide, a heavy card is coming.
+    </div>
+    <button class="big-btn" id="startBtn">Begin the duel</button>
+    <p class="hint" style="margin-top:12px">Keyboard: 1–7 play a card · Space ends turn · N new duel</p>
+  </div>
+</div>
+
+<!-- Win screen -->
+<div class="overlay hidden" id="winScreen">
+  <div class="panel">
+    <h2 class="win">🌊 VICTORY! 🌊</h2>
+    <p>The Warden bows and the reef opens. The last pearl is yours — the tide breaks in your favour.</p>
+    <p class="score-line" id="winScore"></p>
+    <button class="big-btn" id="winAgain">Duel again</button>
+  </div>
+</div>
+
+<!-- Loss screen -->
+<div class="overlay hidden" id="lossScreen">
+  <div class="panel">
+    <h2 class="loss">THE TIDE TAKES YOU</h2>
+    <p>Your life ebbs to zero and the Warden keeps the pearl — this time. The reef remembers every duel. Come back stronger.</p>
+    <p class="score-line" id="lossScore"></p>
+    <button class="big-btn" id="lossAgain">Try again</button>
+  </div>
+</div>
+
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
